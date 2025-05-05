@@ -1,0 +1,30 @@
+name: Java CI con Maven
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clonar el código
+        uses: actions/checkout@v3
+
+      - name: Configurar Java 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Compilar con Maven
+        run: mvn -B package --file pom.xml
+
+      - name: Guardar el .jar como artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-app
+          path: target/integration-0.0.1-SNAPSHOT.jar
